@@ -1,6 +1,8 @@
 package ru.yandex.practicum.catsgram.model;
 import lombok.EqualsAndHashCode;
+import lombok.Data;
 
+@Data
 @EqualsAndHashCode
 class Person {
     private String firstName;
@@ -8,11 +10,4 @@ class Person {
     private int age;
     @EqualsAndHashCode.Exclude
     private String phone;
-
-    public Person(String firstName, String lastName, int age, String phone) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.phone = phone;
-    }
 }
