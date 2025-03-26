@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.catsgram.model.Post;
 import ru.yandex.practicum.catsgram.service.PostService;
+import ru.yandex.practicum.catsgram.exception.ParameterNotValidException;
 
 import java.util.List;
 
@@ -16,7 +17,6 @@ public class PostController {
         this.postService = postService;
     }
 
-
     @GetMapping
     public List<Post> findAll(
             @RequestParam(defaultValue = "0") int from,
@@ -24,11 +24,14 @@ public class PostController {
             @RequestParam(defaultValue = "desc") String sort
     ) {
         if (size <= 0) {
-            throw new IllegalArgumentException("Параметр size должен быть больше 0");
+            throw new ParameterNotValidException("size", "Размер должен быть больше нуля");
+        }
+        if (from < 0) {
+            throw new ParameterNotValidException("from", "Начало выборки должно быть положительным числом");
         }
         SortOrder sortOrder = SortOrder.from(sort);
         if (sortOrder == null) {
-            throw new IllegalArgumentException("Некорректное значение параметра sort: " + sort);
+            throw new ParameterNotValidException("sort", "Получено: " + sort + ", должно быть: asc или desc");
         }
         return postService.findAll(from, size, sortOrder);
     }
